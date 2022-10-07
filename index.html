@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./CSS/style.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" 
+    crossorigin="anonymous">
+    <script 
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js">
+    </script>
+
+    <title>Weather Dashboard</title>
+</head>
+<body>
+  <header id="header">
+    <h1 class="m-2" id="title"> Weather Dashboard</h1>
+  </header>
+ 
+  <!-- Whole Page Container -->
+  <section class="container-fluid row">
+  <!-- Search Input section -->
+    <section class="col-3 mr-4">
+      <div class="row mb-3">
+        <form class="g-3 m-2" id="citySearchForm">
+          <label for="citySearch" class="h4 form-label">Search for a City:</label>
+          <input type="text" class="form-control" name="cityInput" id="cityFormInput" placeholder="Enter City Name">
+          <button type="button" class="btn btn-primary mt-2 border-bottom" id="cityFormBtn" data-toggle="modal" data-target="#cityModal">Submit</button>
+          <div class="border-bottom border-3  mt-3"></div>
+        </form>
+         <!--Recently Searched Cities -->
+        <div class=" col-4 d-grid gap-2 searchedCities">
+          <!-- Dynamically populated based on localStorage -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Today's Weather -->
+    <section class="col-9 right">
+      <div class="row mb-3">
+        <div class="card">
+          <div class="card-body todayConditions">
+          <!-- details dynamically populated -->
+          </div>
+        </div>
+    
+        <!-- Five Day Container -->
+        <div class="row fiveDayContainer">
+        <!-- 5 Days -->
+          <div class="col-4 dayContainer">
+           <!-- Daily conditions dyanmically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  <script src="./JS/script.js"></script>
+</body>
+</html>

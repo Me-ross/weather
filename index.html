@@ -20,6 +20,8 @@
     <h1 class="m-2" id="title"> Weather Dashboard</h1>
   </header>
  
+  <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> -->
+
   <!-- Whole Page Container -->
   <section class="container-fluid row">
   <!-- Search Input section -->
@@ -28,11 +30,11 @@
         <form class="g-3 m-2" id="citySearchForm">
           <label for="citySearch" class="h4 form-label">Search for a City:</label>
           <input type="text" class="form-control" name="cityInput" id="cityFormInput" placeholder="Enter City Name">
-          <button type="button" class="btn btn-primary mt-2 border-bottom" id="cityFormBtn" data-toggle="modal" data-target="#cityModal">Submit</button>
+          <button type="button" class="btn btn-primary mt-2 border-bottom" id="cityFormBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Submit</button>
           <div class="border-bottom border-3  mt-3"></div>
         </form>
          <!--Recently Searched Cities -->
-        <div class=" col-4 d-grid gap-2 searchedCities">
+        <div class=" col-2 d-grid gap-2 searchedCities">
           <!-- Dynamically populated based on localStorage -->
         </div>
       </div>
@@ -41,21 +43,48 @@
     <!-- Today's Weather -->
     <section class="col-9 right">
       <div class="row mb-3">
-        <div class="card">
+        <div class="card m-2">
           <div class="card-body todayConditions">
           <!-- details dynamically populated -->
           </div>
         </div>
     
         <!-- Five Day Container -->
-        <div class="row fiveDayContainer">
+        <div class="row fiveDayContainer m-1">
         <!-- 5 Days -->
-          <div class="col-4 dayContainer">
+          <div class="row dayContainer">
            <!-- Daily conditions dyanmically populated -->
           </div>
         </div>
       </div>
     </section>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Recipient:</label>
+                <input type="text" class="form-control" id="recipient-name">
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label">Message:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Send message</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
 

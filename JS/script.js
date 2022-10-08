@@ -55,7 +55,8 @@ function createCityList() {
 // Verify which City user wants
 // Get city Latitude, Longitude
 function getCityLatLon(searchCities) {
-    let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=1&appid=e821e3b80ebc742487bb15e97528ea81';
+    // let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=1&appid=e821e3b80ebc742487bb15e97528ea81';
+    let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
   
     fetch(requestUrl)
       .then(function (response) {
@@ -72,10 +73,14 @@ function getCityLatLon(searchCities) {
 
         getCityDetails(latitude, longitude)
        
-        // let modal = createModal(data);
-        // $('#cityFormBtn').append(modal);
+        let modal = createModal(data);
+       
+
+
+        $('body').append(modal);
       });
   }
+
 
   function getCityDetails() {
     let requestCityCond =   
@@ -129,11 +134,10 @@ function getCityLatLon(searchCities) {
   }
   
   function fiveDayOutlook(day) {
-    for (var i = 1; i < 6; i++) {
-      $('.fiveDayContainer').empty
-     
+    $('.dayContainer').empty();
+    for (var i = 1; i < 6; i++) {   
       let fiveDayCardEl = $('<div>')
-        .addClass("card");
+        .addClass("card col-2 m-2");
         // `fiveDayCard-${[i]}`
       let fiveDayBodyEl = $('<div>')
       .addClass("card-body");
@@ -183,83 +187,101 @@ function getCityLatLon(searchCities) {
       $('.searchedCities').append(cityButtonEl);
     }
   }
+
   // ***MODAL***
-  // function createModal(confirmCity){
-  //   console.log(confirmCity);
-  //   let modal = $("<div>");
-  //   modal.attr({
-  //   class: "modal fade",
-  //   tabindex: "-1",
-  //   role: "dialog",  
-  //   id: "cityModal"
-  //   });
-  //   modal.attr("aria-labelledby", "cityModalLabel");
-  //   modal.attr("aria-hidden", "true");
+  function createModal(confirmCity){
+    console.log(confirmCity);
+    let modal = $("<div>");
+    modal.attr({
+    class: "modal fade",
+    tabindex: "-1",
+    role: "dialog",  
+    id: "cityModal"
+    });
+    modal.attr("aria-labelledby", "cityModalLabel");
+    modal.attr("aria-hidden", "true");
 
-  //   let modalDialog = $("<div>");
-  //   modalDialog.attr({
-  //     class: "modal-dialog",
-  //     role: "document",
-  //   });
+    let modalDialog = $("<div>");
+    modalDialog.attr({
+      class: "modal-dialog",
+      role: "document",
+    });
 
-  //   let modalContent = $("<div>");
-  //   modalContent.attr("class", "modal-content");
+    let modalContent = $("<div>");
+    modalContent.attr("class", "modal-content");
 
-  //   let modalHeader = $("<div>");
-  //   modalHeader.attr("class", "modal-header");
-  //   modalContent.append(modalHeader);
+    let modalHeader = $("<div>");
+    modalHeader.attr("class", "modal-header");
+    modalContent.append(modalHeader);
 
-  //   let modalTitle = $("<h5>");
-  //   modalTitle.attr({
-  //     class: "modal-title",
-  //     id: "cityModalLabel",
-  //   });
-  //   modalTitle.text("Which city do you prefer:");
-  //   modalHeader.append(modalTitle);
-  //   console.log(modalTitle.text);
-  //   let modalExitBtn = $("<button>");
-  //   modalExitBtn.attr({
-  //     type: "button",
-  //     class: "close",
-  //   });
-  //   modalExitBtn.attr("data-dismiss", "modal");
-  //   modalExitBtn.attr("aria-label", "Close");
-  //   modalHeader.append(modalExitBtn);
+    let modalTitle = $("<h5>");
+    modalTitle.attr({
+      class: "modal-title",
+      id: "cityModalLabel",
+    });
+    modalTitle.text("Which city do you prefer:");
+    modalHeader.append(modalTitle);
+    console.log(modalTitle.text);
+    let modalExitBtn = $("<button>");
+    modalExitBtn.attr({
+      type: "button",
+      class: "close",
+    });
+    modalExitBtn.attr("data-dismiss", "modal");
+    modalExitBtn.attr("aria-label", "Close");
+    modalHeader.append(modalExitBtn);
 
-  //   let modalSpan = $("<span>");
-  //   modalSpan.attr("aria-hidden", "true");
-  //   modalSpan.text("X");
-  //   modalExitBtn.append(modalSpan);
+    let modalSpan = $("<span>");
+    modalSpan.attr("aria-hidden", "true");
+    modalSpan.text("X");
+    modalExitBtn.append(modalSpan);
 
-  //   let modalBody = $("<div>");
-  //   modalBody.attr("class", "modal-body");
-  //   // modalBody.text("");
-  //   modalContent.append(modalBody);
+    let modalBody = $("<div>");
+    modalBody.attr("class", "modal-body");
+    // modalBody.text("");
+    modalContent.append(modalBody);
 
-  //   console.log(confirmCity);
-  //   for (let i = 0; i < confirmCity.length; i++) {
-  //     let modalCityBtn = $("<button>");
-  //     modalCityBtn.attr({
-  //       type: "button",
-  //       class: "btn btn-primary",
-  //       class: confirmCity[i].name,
-  //     });
+    console.log(confirmCity);
+    for (let i = 0; i < confirmCity.length; i++) {
+      let modalCityBtn = $("<button>");
+      modalCityBtn.attr({
+        type: "button",
+        class: "btn btn-primary",
+        class: confirmCity[i].name,
+      });
 
-  //     modalCityBtn.text(
-  //       confirmCity[i].name +
-  //       ", " +
-  //       confirmCity[i].state +
-  //       " in " +
-  //       confirmCity[i].country
-  //     );
-  //     modalBody.append(modalCityBtn);
+      modalCityBtn.text(
+        confirmCity[i].name +
+        ", " +
+        confirmCity[i].state +
+        " in " +
+        confirmCity[i].country
+      );
+      modalBody.append(modalCityBtn);
 
-  //     modalDialog.append(modalContent);
-  //     modal.append(modalDialog);
+      modalDialog.append(modalContent);
+      modal.append(modalDialog);
 
-  //     console.log(modalCityBtn);
-  //   }
-  // return modal;
-  // }
+      console.log(modalCityBtn);
+    }
+  return modal;
+  }
 
   $("#citySearchForm").on("click", "#cityFormBtn", handleCityInput);
+
+  const exampleModal = document.getElementById('exampleModal')
+  exampleModal.addEventListener('show.bs.modal', event => {
+    // Button that triggered the modal
+    const button = event.relatedTarget
+    // Extract info from data-bs-* attributes
+    const recipient = button.getAttribute('data-bs-whatever')
+    // If necessary, you could initiate an AJAX request here
+    // and then do the updating in a callback.
+    //
+    // Update the modal's content.
+    const modalTitle = exampleModal.querySelector('.modal-title')
+    const modalBodyInput = exampleModal.querySelector('.modal-body input')
+  
+    modalTitle.textContent = `New message to ${recipient}`
+    modalBodyInput.value = recipient
+  })

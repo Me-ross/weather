@@ -30,7 +30,7 @@ function handleCityInput(event) {
     localStorage.setItem('city', JSON.stringify(savedCityName));
      //clear input field
      $('input[name="cityInput"]').val("");
-     getCityLatLon(userCityInput);
+     getCityNames(userCityInput);
      createCityList(savedCityName);
    
 };
@@ -54,7 +54,7 @@ function createCityList() {
 
 // Verify which City user wants
 // Get city Latitude, Longitude
-function getCityLatLon(searchCities) {
+function getCityNames(searchCities) {
     // let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=1&appid=e821e3b80ebc742487bb15e97528ea81';
     let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
   
@@ -64,25 +64,19 @@ function getCityLatLon(searchCities) {
       })
       .then(function (data) {
         console.log(data);
-        latitude = data[0].lat
-        //round latitude and longitude to 2 decimals
-        latitude = Math.round((latitude + Number.EPSILON) * 100) / 100
-        longitude = data[0].lon
-        longitude = Math.round((longitude + Number.EPSILON) * 100) / 100
-        cityName = data[0].name + ", " + data[0].state + " " + data[0].country
-
-        getCityDetails(latitude, longitude)
        
-        let modal = createModal(data);
-       
-
-
-        $('body').append(modal);
+      createModal(data);
+        
       });
   }
 
 
-  function getCityDetails() {
+  function getCityDetails(latitude, longitude) {
+    console.log('before round, '+ latitude + longitude);
+    latitude = Math.round((latitude + Number.EPSILON) * 100) / 100;
+    console.log(latitude);
+    longitude = Math.round((longitude + Number.EPSILON) * 100) / 100;
+    console.log(longitude);
     let requestCityCond =   
     'https://api.openweathermap.org/data/3.0/onecall?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=053f4ed773048dce5e5a984df3967ade';  
     
@@ -173,101 +167,29 @@ function getCityLatLon(searchCities) {
       
   }
 
-  function createCityList() {
-    $('.searchedCities').empty();
-    for (var i = 0; i < savedCityName.length; i++) {
-      cityButtonEl = $("<button>");
-      let buttonText = cityButtonEl.text(savedCityName[i]);
-      cityButtonEl.append(buttonText);
-      cityButtonEl.attr({
-        type: "submit",
-        class: "btn btn-primary",
-        id: savedCityName[i],
-      });
-      $('.searchedCities').append(cityButtonEl);
-    }
-  }
-
   // ***MODAL***
   function createModal(confirmCity){
     console.log(confirmCity);
-    let modal = $("<div>");
-    modal.attr({
-    class: "modal fade",
-    tabindex: "-1",
-    role: "dialog",  
-    id: "cityModal"
-    });
-    modal.attr("aria-labelledby", "cityModalLabel");
-    modal.attr("aria-hidden", "true");
+    //set names of each button
+    $('#btnOne').text(confirmCity[0].name + ", " + confirmCity[0].state + " in " + confirmCity[0].country);
+      $('#btnTwo').text(confirmCity[1].name + ", " + confirmCity[1].state + " in " + confirmCity[1].country);
+      $('#btnThree').text(confirmCity[2].name + ", " + confirmCity[2].state + " in " + confirmCity[2].country);
 
-    let modalDialog = $("<div>");
-    modalDialog.attr({
-      class: "modal-dialog",
-      role: "document",
-    });
+      $('#btnOne').attr({
+        latitude: confirmCity[0].lat,
+        longitude: confirmCity[0].lon,
+      })
 
-    let modalContent = $("<div>");
-    modalContent.attr("class", "modal-content");
+      $('#btnTwo').attr({
+        latitude: confirmCity[1].lat,
+        longitude: confirmCity[1].lon,
+      })
 
-    let modalHeader = $("<div>");
-    modalHeader.attr("class", "modal-header");
-    modalContent.append(modalHeader);
-
-    let modalTitle = $("<h5>");
-    modalTitle.attr({
-      class: "modal-title",
-      id: "cityModalLabel",
-    });
-    modalTitle.text("Which city do you prefer:");
-    modalHeader.append(modalTitle);
-    console.log(modalTitle.text);
-    let modalExitBtn = $("<button>");
-    modalExitBtn.attr({
-      type: "button",
-      class: "close",
-    });
-    modalExitBtn.attr("data-dismiss", "modal");
-    modalExitBtn.attr("aria-label", "Close");
-    modalHeader.append(modalExitBtn);
-
-    let modalSpan = $("<span>");
-    modalSpan.attr("aria-hidden", "true");
-    modalSpan.text("X");
-    modalExitBtn.append(modalSpan);
-
-    let modalBody = $("<div>");
-    modalBody.attr("class", "modal-body");
-    // modalBody.text("");
-    modalContent.append(modalBody);
-
-    console.log(confirmCity);
-    for (let i = 0; i < confirmCity.length; i++) {
-      let modalCityBtn = $("<button>");
-      modalCityBtn.attr({
-        type: "button",
-        class: "btn btn-primary",
-        class: confirmCity[i].name,
-      });
-
-      modalCityBtn.text(
-        confirmCity[i].name +
-        ", " +
-        confirmCity[i].state +
-        " in " +
-        confirmCity[i].country
-      );
-      modalBody.append(modalCityBtn);
-
-      modalDialog.append(modalContent);
-      modal.append(modalDialog);
-
-      console.log(modalCityBtn);
+      $('#btnThree').attr({
+        latitude: confirmCity[2].lat,
+        longitude: confirmCity[2].lon,
+      })
     }
-  return modal;
-  }
-
-  $("#citySearchForm").on("click", "#cityFormBtn", handleCityInput);
 
   const exampleModal = document.getElementById('exampleModal')
   exampleModal.addEventListener('show.bs.modal', event => {
@@ -275,13 +197,47 @@ function getCityLatLon(searchCities) {
     const button = event.relatedTarget
     // Extract info from data-bs-* attributes
     const recipient = button.getAttribute('data-bs-whatever')
-    // If necessary, you could initiate an AJAX request here
-    // and then do the updating in a callback.
-    //
-    // Update the modal's content.
-    const modalTitle = exampleModal.querySelector('.modal-title')
-    const modalBodyInput = exampleModal.querySelector('.modal-body input')
-  
-    modalTitle.textContent = `New message to ${recipient}`
-    modalBodyInput.value = recipient
+    
   })
+
+  $("#citySearchForm").on("click", "#cityFormBtn", handleCityInput);
+  
+ 
+$('#btnOne').on('click', function () {
+  console.log('after click');
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  longitude = + (longitude)
+  console.log(longitude);
+  getCityDetails(latitude, longitude);
+})
+
+$('#btnTwo').on('click', function () {
+  console.log('after click');
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  longitude = + (longitude)
+  console.log(longitude);
+  getCityDetails(latitude, longitude);
+})
+
+$('#btnThree').on('click', function () {
+  console.log('after click');
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  longitude = + (longitude)
+  console.log(longitude);
+  getCityDetails(latitude, longitude);
+})

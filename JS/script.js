@@ -2,27 +2,25 @@ let todayConditionsEl = $('.todayConditions');
 
 let userCityInput;
 let searchedCity;
-let cityList;
+let cityList = [];
 let latitude;
 let longitude;
 let dailyConditions;
 let cityName;
 
-init();
-//set city storage to an empty array when page is refreshed
-function init() {
-  cityList = [];
-  localStorage.setItem("city", JSON.stringify(cityList));
-}
-console.log(cityList)
+// init();
+// //set city storage to an empty array when page is refreshed
+// function init() {
+//   cityList = [];
+//   localStorage.setItem("city", JSON.stringify(cityList));
+// }
 
 // UserInput returns 3 top matches sent to Modal
 function getCityNames(event) {
   event.preventDefault();
   userCityInput = $(this).siblings("#cityFormInput").val();
-  console.log(userCityInput);
   if (userCityInput == "") {
-    return
+    console.log('empty input')
   } else {
   let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
 
@@ -31,7 +29,6 @@ function getCityNames(event) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
     //clear input field
     $('input[name="cityInput"]').val("");
     createModal(data);        
@@ -41,7 +38,6 @@ function getCityNames(event) {
 
 // ***MODAL***
 function createModal(confirmCity){
-  console.log(confirmCity);
   //set names of each button
   $('#btnOne').text(confirmCity[0].name + ", " + confirmCity[0].state + " in " + confirmCity[0].country);
   $('#btnTwo').text(confirmCity[1].name + ", " + confirmCity[1].state + " in " + confirmCity[1].country);
@@ -68,28 +64,13 @@ const exampleModal = document.getElementById('exampleModal')
 exampleModal.addEventListener('show.bs.modal', event => {
   // Button that triggered the modal
   const button = event.relatedTarget
-  // Extract info from data-bs-* attributes
-  const recipient = button.getAttribute('data-bs-whatever')
 })
 
 // Handle choice of city from Modal
 $('#btnOne').on('click', function () {
   latitude = $(this).attr("latitude");
-  console.log(latitude);
   longitude = $(this).attr("longitude");
   cityName = $('#btnOne').text();
-
-  // create Recently viewed search button
-  cityButtonEl = $("<button>");
-  let buttonText = cityName;
-  cityButtonEl.append(buttonText);
-  cityButtonEl.attr({
-    type: "submit",
-    class: "btn btn-primary searchedCity",
-    latitude: ($('#btnOne').attr("latitude")),
-    longitude: ($('#btnOne').attr("longitude")),
-    });
-  $('.searchedCities').append(cityButtonEl);
 
   handleSavedCity(cityName, latitude, longitude);
   getCityDetails(latitude, longitude);
@@ -97,7 +78,6 @@ $('#btnOne').on('click', function () {
 
 $('#btnTwo').on('click', function () {
   latitude = $(this).attr("latitude");
-  console.log(latitude);
   longitude = $(this).attr("longitude");
   cityName = $('#btnTwo').text();
 
@@ -105,6 +85,7 @@ $('#btnTwo').on('click', function () {
   latitude = + (latitude);
   longitude = + (longitude)
   console.log(longitude);
+  handleSavedCity(cityName, latitude, longitude);
   getCityDetails(latitude, longitude);
 })
 
@@ -118,6 +99,7 @@ $('#btnThree').on('click', function () {
   latitude = + (latitude);
   longitude = + (longitude)
   console.log(longitude);
+  handleSavedCity(cityName, latitude, longitude);
   getCityDetails(latitude, longitude);
 })
 
@@ -130,7 +112,6 @@ function handleSavedCity(cityName, latitude, longitude) {
   };
   cityList.push(searchedCity);
   localStorage.setItem("city", JSON.stringify(cityList));
-  console.log(cityList)
   createCityList(cityList);
 }
 
@@ -143,8 +124,10 @@ function createCityList() {
     cityButtonEl.append(buttonText);
     cityButtonEl.attr({
       type: "submit",
-      class: "btn btn-primary",
-      id: cityList[i].name,
+      class: "btn citylist-btn",
+      latitude: ((cityList[i].lat)),
+      longitude: ((cityList[i].lon)),
+      id: "cityListed",
     });
     $('.searchedCities').append(cityButtonEl);
   }
@@ -155,11 +138,9 @@ function getCityDetails(latitude, longitude) {
   latitude = + (latitude);
   //round Latitude to 2 digit demical
   latitude = Math.round((latitude + Number.EPSILON) * 100) / 100;
-  console.log(latitude);
 
   longitude = + (longitude)
   longitude = Math.round((longitude + Number.EPSILON) * 100) / 100;
-  console.log(longitude);
 
   let requestCityCond =   
   'https://api.openweathermap.org/data/3.0/onecall?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=053f4ed773048dce5e5a984df3967ade';  
@@ -169,14 +150,13 @@ function getCityDetails(latitude, longitude) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
 
-    todayConditions(data)
+    todayConditions(data, cityName)
     });
 }
 
 //Create card to show Today's weather conditions for specific city
-  function todayConditions(weather) {
+  function todayConditions(weather, cityName) {
       todayConditionsEl.empty();
 
       let cityTitleEl = $('<h5>')
@@ -207,7 +187,6 @@ function getCityDetails(latitude, longitude) {
         todayHumidityEl)
 
       dailyConditions = weather.daily
-      console.log(dailyConditions)
       fiveDayOutlook(dailyConditions);
   }
   
@@ -215,7 +194,7 @@ function getCityDetails(latitude, longitude) {
     $('.dayContainer').empty();
     for (var i = 1; i < 6; i++) {   
       let fiveDayCardEl = $('<div>')
-        .addClass("card col-2 m-2");
+        .addClass("card col-2 m-2 day");
         // `fiveDayCard-${[i]}`
       let fiveDayBodyEl = $('<div>')
       .addClass("card-body");
@@ -229,13 +208,13 @@ function getCityDetails(latitude, longitude) {
       
     //\xB0F creates the degrees sign before F
       let dayTempEl = $("<p>")
-        .text('Temp: ' + Math.ceil(day[i].temp.max) + ' \xB0F');
+        .text("Temp:\n" + Math.ceil(day[i].temp.min) + ' / ' + Math.ceil(day[i].temp.max) + ' \xB0F');
       
       let dayWindEl = $("<p>")
-        .text('Wind: ' + Math.ceil(day[i].wind_speed) + ' MPH');
+        .text('Wind:\n' + Math.ceil(day[i].wind_speed) + ' MPH');
          
       let dayHumidityEl = $("<p>")
-        .text('Humidity: ' + day[i].humidity + ' %');
+        .text('Humidity:\n' + day[i].humidity + ' %');
       
       fiveDayBodyEl.append(
        dayTitleEl, 
@@ -245,9 +224,18 @@ function getCityDetails(latitude, longitude) {
        dayHumidityEl);
 
       fiveDayCardEl.append(fiveDayBodyEl);
-      // $("#`${[i]}`").append(fiveDayCardEl);
       $('.dayContainer').append(fiveDayCardEl)
     }    
   }
+
+  $('.searchedCities').on('click', '#cityListed', function(){
+    latitude = $(this).attr("latitude");
+    console.log(latitude);
+    longitude = $(this).attr("longitude");
+    console.log(longitude);
+    cityName = $(this).text();
+    console.log(cityName);
+    getCityDetails(latitude, longitude, cityName);
+  });
 
 $("#citySearchForm").on("click", "#cityFormBtn",getCityNames);

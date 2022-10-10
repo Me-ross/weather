@@ -12,23 +12,24 @@
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js">
     </script>
+    <link rel="stylesheet" href="./CSS/style.css" />
 
     <title>Weather Dashboard</title>
 </head>
 <body>
-  <header id="header">
+  <header>
     <h1 class="m-2" id="title"> Weather Dashboard</h1>
   </header>
 
   <!-- Whole Page Container -->
   <section class="container-fluid row">
   <!-- Search Input section -->
-    <section class="col-3 mr-4">
+    <section class="col-2 mr-4">
       <div class="row mb-3">
         <form class="g-3 m-2" id="citySearchForm">
           <label for="citySearch" class="h5 form-label">Search for a City:</label>
           <input type="text" class="form-control" name="cityInput" id="cityFormInput" placeholder="Enter City Name">
-          <button type="button" class="btn btn-primary mt-2 border-bottom form-control" id="cityFormBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Submit</button>
+          <button type="button" class="btn blue-btn mt-2 border-bottom form-control" id="cityFormBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Submit</button>
           <div class="border-bottom border-3 mt-3"></div>
         </form>
          <!--Recently Searched Cities -->
@@ -39,7 +40,7 @@
     </section>
 
     <!-- Today's Weather -->
-    <section class="col-9 right">
+    <section class="col-10 right">
       <div class="row mb-3">
         <div class="card m-2">
           <div class="card-body todayConditions">
@@ -66,12 +67,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <button type="button" class="btn btn-primary mb-2 form-control" id="btnOne" data-bs-dismiss="modal"></button>
-            <button type="button" class="btn btn-primary mb-2 form-control" id="btnTwo" data-bs-dismiss="modal"></button>
-            <button type="button" class="btn btn-primary mb-2 form-control" id="btnThree" data-bs-dismiss="modal" ></button>
+            <button type="button" class="btn blue-btn mb-2 form-control" id="btnOne" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn blue-btn mb-2 form-control" id="btnTwo" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn blue-btn mb-2 form-control" id="btnThree" data-bs-dismiss="modal" ></button>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-reverse" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

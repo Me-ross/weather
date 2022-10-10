@@ -1,0 +1,42 @@
+:root{
+  --bluedk: #03045e;
+  --bluelt: #00b4d8;
+  --bluepale: #edf6f9;
+
+  --beige: #faedcd;
+  --offwhite: #fefae0;
+}
+
+header, .day{
+    background-color: var(--bluedk);
+    color: var(--bluepale);
+    text-align: center;
+}
+
+.fiveDayContainer, .dayContainer  {
+    justify-content: space-around;
+}
+
+.searchedCities {
+    border: none;
+}
+
+.blue-btn {
+    background-color: var(--bluelt);
+    color: #03045e;
+}
+
+.btn-reverse {
+    background-color: var(--bluedk);
+    color: white
+}
+
+.citylist-btn {
+    background-color: var(--bluepale);
+    color: var(--bluedk);
+}
+
+/* .day {
+    background-color: var(--bluedk);
+    color: var(--bluepale);
+} */

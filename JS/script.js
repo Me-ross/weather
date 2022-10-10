@@ -1,7 +1,8 @@
 let todayConditionsEl = $('.todayConditions');
 
 let userCityInput;
-let savedCityName = [];
+let searchedCity;
+let cityList;
 let latitude;
 let longitude;
 let dailyConditions;
@@ -10,86 +11,169 @@ let cityName;
 init();
 //set city storage to an empty array when page is refreshed
 function init() {
-    savedCityName = [];
-    localStorage.setItem("city", JSON.stringify(savedCityName));
-    if (localStorage.getItem("city")) {
-      savedCityName = JSON.parse(localStorage.getItem("city"));
-    } else {
-      savedCityName = [];
-    }
-  }
-console.log(savedCityName)
+  cityList = [];
+  localStorage.setItem("city", JSON.stringify(cityList));
+}
+console.log(cityList)
 
-//listens for the input click and assign value to cityName
-function handleCityInput(event) {
-// $("#citySearchForm").on("click", "#cityFormBtn", function (event) {
-    event.preventDefault();
-    userCityInput = $(this).siblings("#cityFormInput").val();
-    console.log(userCityInput);
-    savedCityName.push(userCityInput);
-    localStorage.setItem('city', JSON.stringify(savedCityName));
-     //clear input field
-     $('input[name="cityInput"]').val("");
-     getCityNames(userCityInput);
-     createCityList(savedCityName);
-   
-};
-console.log(savedCityName)
+// UserInput returns 3 top matches sent to Modal
+function getCityNames(event) {
+  event.preventDefault();
+  userCityInput = $(this).siblings("#cityFormInput").val();
+  console.log(userCityInput);
+  if (userCityInput == "") {
+    return
+  } else {
+  let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
+
+  fetch(requestUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    //clear input field
+    $('input[name="cityInput"]').val("");
+    createModal(data);        
+    });
+  }
+}
+
+// ***MODAL***
+function createModal(confirmCity){
+  console.log(confirmCity);
+  //set names of each button
+  $('#btnOne').text(confirmCity[0].name + ", " + confirmCity[0].state + " in " + confirmCity[0].country);
+  $('#btnTwo').text(confirmCity[1].name + ", " + confirmCity[1].state + " in " + confirmCity[1].country);
+  $('#btnThree').text(confirmCity[2].name + ", " + confirmCity[2].state + " in " + confirmCity[2].country);
+
+  $('#btnOne').attr({
+    latitude: confirmCity[0].lat,
+    longitude: confirmCity[0].lon,
+  })
+
+  $('#btnTwo').attr({
+    latitude: confirmCity[1].lat,
+    longitude: confirmCity[1].lon,
+  })
+
+  $('#btnThree').attr({
+    latitude: confirmCity[2].lat,
+    longitude: confirmCity[2].lon,
+  })
+}
+
+// Modal trigger
+const exampleModal = document.getElementById('exampleModal')
+exampleModal.addEventListener('show.bs.modal', event => {
+  // Button that triggered the modal
+  const button = event.relatedTarget
+  // Extract info from data-bs-* attributes
+  const recipient = button.getAttribute('data-bs-whatever')
+})
+
+// Handle choice of city from Modal
+$('#btnOne').on('click', function () {
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+  cityName = $('#btnOne').text();
+
+  // create Recently viewed search button
+  cityButtonEl = $("<button>");
+  let buttonText = cityName;
+  cityButtonEl.append(buttonText);
+  cityButtonEl.attr({
+    type: "submit",
+    class: "btn btn-primary searchedCity",
+    latitude: ($('#btnOne').attr("latitude")),
+    longitude: ($('#btnOne').attr("longitude")),
+    });
+  $('.searchedCities').append(cityButtonEl);
+
+  handleSavedCity(cityName, latitude, longitude);
+  getCityDetails(latitude, longitude);
+})
+
+$('#btnTwo').on('click', function () {
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+  cityName = $('#btnTwo').text();
+
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  longitude = + (longitude)
+  console.log(longitude);
+  getCityDetails(latitude, longitude);
+})
+
+$('#btnThree').on('click', function () {
+  latitude = $(this).attr("latitude");
+  console.log(latitude);
+  longitude = $(this).attr("longitude");
+  cityName = $('#btnThree').text();
+1
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  longitude = + (longitude)
+  console.log(longitude);
+  getCityDetails(latitude, longitude);
+})
+
+// Save searched city to local storage
+function handleSavedCity(cityName, latitude, longitude) {
+  searchedCity = {
+    name: cityName,
+    lat: latitude,
+    lon: longitude,
+  };
+  cityList.push(searchedCity);
+  localStorage.setItem("city", JSON.stringify(cityList));
+  console.log(cityList)
+  createCityList(cityList);
+}
 
 // Create list of saved cities to search in future
 function createCityList() {
   $('.searchedCities').empty();
-  for (var i = 0; i < savedCityName.length; i++) {
+  for (var i = 0; i <cityList.length; i++) {
     cityButtonEl = $("<button>");
-    let buttonText = cityButtonEl.text(savedCityName[i]);
+    let buttonText = cityButtonEl.text(cityList[i].name);
     cityButtonEl.append(buttonText);
     cityButtonEl.attr({
       type: "submit",
       class: "btn btn-primary",
-      id: savedCityName[i],
+      id: cityList[i].name,
     });
     $('.searchedCities').append(cityButtonEl);
   }
 }
 
-// Verify which City user wants
-// Get city Latitude, Longitude
-function getCityNames(searchCities) {
-    // let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=1&appid=e821e3b80ebc742487bb15e97528ea81';
-    let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + searchCities + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
-  
-    fetch(requestUrl)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
-       
-      createModal(data);
-        
-      });
-  }
+function getCityDetails(latitude, longitude) {  
+  // convert lat and lon from string to a number
+  latitude = + (latitude);
+  //round Latitude to 2 digit demical
+  latitude = Math.round((latitude + Number.EPSILON) * 100) / 100;
+  console.log(latitude);
 
+  longitude = + (longitude)
+  longitude = Math.round((longitude + Number.EPSILON) * 100) / 100;
+  console.log(longitude);
 
-  function getCityDetails(latitude, longitude) {
-    console.log('before round, '+ latitude + longitude);
-    latitude = Math.round((latitude + Number.EPSILON) * 100) / 100;
-    console.log(latitude);
-    longitude = Math.round((longitude + Number.EPSILON) * 100) / 100;
-    console.log(longitude);
-    let requestCityCond =   
-    'https://api.openweathermap.org/data/3.0/onecall?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=053f4ed773048dce5e5a984df3967ade';  
+  let requestCityCond =   
+  'https://api.openweathermap.org/data/3.0/onecall?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=053f4ed773048dce5e5a984df3967ade';  
     
-    fetch(requestCityCond)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
+  fetch(requestCityCond)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
 
-      todayConditions(data)
-      });
-  }
+    todayConditions(data)
+    });
+}
 
 //Create card to show Today's weather conditions for specific city
   function todayConditions(weather) {
@@ -163,81 +247,7 @@ function getCityNames(searchCities) {
       fiveDayCardEl.append(fiveDayBodyEl);
       // $("#`${[i]}`").append(fiveDayCardEl);
       $('.dayContainer').append(fiveDayCardEl)
-    }
-      
+    }    
   }
 
-  // ***MODAL***
-  function createModal(confirmCity){
-    console.log(confirmCity);
-    //set names of each button
-    $('#btnOne').text(confirmCity[0].name + ", " + confirmCity[0].state + " in " + confirmCity[0].country);
-      $('#btnTwo').text(confirmCity[1].name + ", " + confirmCity[1].state + " in " + confirmCity[1].country);
-      $('#btnThree').text(confirmCity[2].name + ", " + confirmCity[2].state + " in " + confirmCity[2].country);
-
-      $('#btnOne').attr({
-        latitude: confirmCity[0].lat,
-        longitude: confirmCity[0].lon,
-      })
-
-      $('#btnTwo').attr({
-        latitude: confirmCity[1].lat,
-        longitude: confirmCity[1].lon,
-      })
-
-      $('#btnThree').attr({
-        latitude: confirmCity[2].lat,
-        longitude: confirmCity[2].lon,
-      })
-    }
-
-  const exampleModal = document.getElementById('exampleModal')
-  exampleModal.addEventListener('show.bs.modal', event => {
-    // Button that triggered the modal
-    const button = event.relatedTarget
-    // Extract info from data-bs-* attributes
-    const recipient = button.getAttribute('data-bs-whatever')
-    
-  })
-
-  $("#citySearchForm").on("click", "#cityFormBtn", handleCityInput);
-  
- 
-$('#btnOne').on('click', function () {
-  console.log('after click');
-  latitude = $(this).attr("latitude");
-  console.log(latitude);
-  longitude = $(this).attr("longitude");
-
-  // convert lat and lon from string to a number
-  latitude = + (latitude);
-  longitude = + (longitude)
-  console.log(longitude);
-  getCityDetails(latitude, longitude);
-})
-
-$('#btnTwo').on('click', function () {
-  console.log('after click');
-  latitude = $(this).attr("latitude");
-  console.log(latitude);
-  longitude = $(this).attr("longitude");
-
-  // convert lat and lon from string to a number
-  latitude = + (latitude);
-  longitude = + (longitude)
-  console.log(longitude);
-  getCityDetails(latitude, longitude);
-})
-
-$('#btnThree').on('click', function () {
-  console.log('after click');
-  latitude = $(this).attr("latitude");
-  console.log(latitude);
-  longitude = $(this).attr("longitude");
-
-  // convert lat and lon from string to a number
-  latitude = + (latitude);
-  longitude = + (longitude)
-  console.log(longitude);
-  getCityDetails(latitude, longitude);
-})
+$("#citySearchForm").on("click", "#cityFormBtn",getCityNames);

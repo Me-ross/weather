@@ -26,13 +26,13 @@
     <section class="col-3 mr-4">
       <div class="row mb-3">
         <form class="g-3 m-2" id="citySearchForm">
-          <label for="citySearch" class="h4 form-label">Search for a City:</label>
+          <label for="citySearch" class="h5 form-label">Search for a City:</label>
           <input type="text" class="form-control" name="cityInput" id="cityFormInput" placeholder="Enter City Name">
-          <button type="button" class="btn btn-primary mt-2 border-bottom" id="cityFormBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Submit</button>
-          <div class="border-bottom border-3  mt-3"></div>
+          <button type="button" class="btn btn-primary mt-2 border-bottom form-control" id="cityFormBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Submit</button>
+          <div class="border-bottom border-3 mt-3"></div>
         </form>
          <!--Recently Searched Cities -->
-        <div class=" col-2 d-grid gap-2 searchedCities">
+        <div class=" col-2 d-grid gap-2 form-control searchedCities">
           <!-- Dynamically populated based on localStorage -->
         </div>
       </div>
@@ -57,6 +57,7 @@
       </div>
     </section>
 
+<!-- Modal check for which city? -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

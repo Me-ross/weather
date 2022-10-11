@@ -3,7 +3,7 @@
   --bluelt: #00b4d8;
   --bluepale: #edf6f9;
 
-  --beige: #faedcd;
+  --orange: #ff7900;
   --offwhite: #fefae0;
 }
 
@@ -32,11 +32,6 @@ header, .day{
 }
 
 .citylist-btn {
-    background-color: var(--bluepale);
+    background-color: var(--orange);
     color: var(--bluedk);
 }
-
-/* .day {
-    background-color: var(--bluedk);
-    color: var(--bluepale);
-} */

@@ -194,7 +194,7 @@ function getCityDetails(latitude, longitude) {
     $('.dayContainer').empty();
     for (var i = 1; i < 6; i++) {   
       let fiveDayCardEl = $('<div>')
-        .addClass("card col-2 m-2 day");
+        .addClass("card col-lg-2 col-md-10 m-2 day");
         // `fiveDayCard-${[i]}`
       let fiveDayBodyEl = $('<div>')
       .addClass("card-body");

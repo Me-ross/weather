@@ -22,7 +22,7 @@ function getCityNames(event) {
   if (userCityInput == "") {
     console.log('empty input')
   } else {
-  let requestUrl = ' http://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
+  let requestUrl = ' https://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
 
   fetch(requestUrl)
     .then(function (response) {

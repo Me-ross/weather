@@ -166,7 +166,7 @@ function getCityDetails(latitude, longitude) {
       let todayDateEl = ('Today: ' + moment().format("ddd, MMMM Do YYYY"))
 
       let todayIconEl = $("<img>")
-       .attr("src", 'http://openweathermap.org/img/wn/' + weather.current.weather[0].icon + '.png');
+       .attr("src", 'https://openweathermap.org/img/wn/' + weather.current.weather[0].icon + '.png');
       
     //\xB0F creates the degrees sign before F
       let todayTempEl = $("<p>")
@@ -204,7 +204,7 @@ function getCityDetails(latitude, longitude) {
         .text(moment().add([i], 'day').format("ddd, M/D/YYYY"));
 
       let dayIconEl = $("<img>")
-       .attr("src", 'http://openweathermap.org/img/wn/' + day[i].weather[0].icon + '.png');
+       .attr("src", 'https://openweathermap.org/img/wn/' + day[i].weather[0].icon + '.png');
       
     //\xB0F creates the degrees sign before F
       let dayTempEl = $("<p>")

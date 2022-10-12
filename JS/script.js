@@ -1,5 +1,4 @@
 let todayConditionsEl = $('.todayConditions');
-
 let userCityInput;
 let searchedCity;
 let cityList = [];
@@ -8,21 +7,21 @@ let longitude;
 let dailyConditions;
 let cityName;
 
-// init();
-// //set city storage to an empty array when page is refreshed
-// function init() {
-//   cityList = [];
-//   localStorage.setItem("city", JSON.stringify(cityList));
-// }
+init();
+//set city storage to an empty array when page is refreshed
+function init() {
+  cityList = [];
+  localStorage.setItem("city", JSON.stringify(cityList));
+}
 
 // UserInput returns 3 top matches sent to Modal
 function getCityNames(event) {
-  event.preventDefault();
-  userCityInput = $(this).siblings("#cityFormInput").val();
+  userCityInput = $("#cityFormInput").val();
+
   if (userCityInput == "") {
     console.log('empty input')
   } else {
-  let requestUrl = ' https://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
+  let requestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + userCityInput + '&limit=3&appid=e821e3b80ebc742487bb15e97528ea81';
 
   fetch(requestUrl)
     .then(function (response) {
@@ -230,12 +229,22 @@ function getCityDetails(latitude, longitude) {
 
   $('.searchedCities').on('click', '#cityListed', function(){
     latitude = $(this).attr("latitude");
-    console.log(latitude);
     longitude = $(this).attr("longitude");
-    console.log(longitude);
     cityName = $(this).text();
-    console.log(cityName);
     getCityDetails(latitude, longitude, cityName);
   });
 
+//Tigger button click on input 'enter'
+  var inputField = document.getElementById("cityFormInput")
+  inputField.addEventListener("keypress", function(event){
+    if (event.key === "Enter"){
+      event.preventDefault();
+      userCityInput = $("#cityFormInput").val();
+      $('#cityFormBtn').click();
+      getCityNames();
+    }
+  });
+
+//Trigger button click on 'submit' button
 $("#citySearchForm").on("click", "#cityFormBtn",getCityNames);
+ 

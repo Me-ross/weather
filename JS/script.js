@@ -37,70 +37,35 @@ function getCityNames(event) {
 
 // ***MODAL***
 function createModal(confirmCity){
-  //set names of each button
-  $('#btnOne').text(confirmCity[0].name + ", " + confirmCity[0].state + " in " + confirmCity[0].country);
-  $('#btnTwo').text(confirmCity[1].name + ", " + confirmCity[1].state + " in " + confirmCity[1].country);
-  $('#btnThree').text(confirmCity[2].name + ", " + confirmCity[2].state + " in " + confirmCity[2].country);
-
-  $('#btnOne').attr({
-    latitude: confirmCity[0].lat,
-    longitude: confirmCity[0].lon,
-  })
-
-  $('#btnTwo').attr({
-    latitude: confirmCity[1].lat,
-    longitude: confirmCity[1].lon,
-  })
-
-  $('#btnThree').attr({
-    latitude: confirmCity[2].lat,
-    longitude: confirmCity[2].lon,
-  })
+  console.log(confirmCity)
+  $('.modal-body').empty();
+  for (var i = 0; i <confirmCity.length; i++) {
+    let modalBtnEl = $("<button>")
+      .text(confirmCity[i].name + ", " + confirmCity[i].state + " in " + confirmCity[i].country);
+    modalBtnEl.attr({
+      type: "button",
+      id: "modalBtn",
+      //  + [i],
+      class: "btn blue-btn mb-2 form-control",
+      latitude: confirmCity[i].lat,
+      longitude: confirmCity[i].lon,
+      "data-bs-dismiss": "modal",
+    });
+    $('.modal-body').append(modalBtnEl);
+  }
 }
 
-// Modal trigger
-const exampleModal = document.getElementById('exampleModal')
-exampleModal.addEventListener('show.bs.modal', event => {
-  // Button that triggered the modal
-  const button = event.relatedTarget
-})
-
-// Handle choice of city from Modal
-$('#btnOne').on('click', function () {
-  latitude = $(this).attr("latitude");
-  longitude = $(this).attr("longitude");
-  cityName = $('#btnOne').text();
+// capture button click of chosen city
+  $('.modal-body').on('click', "#modalBtn", function () {
+    console.log('arrived at modal click');
+    latitude = $(this).attr("latitude");
+    longitude = $(this).attr("longitude");
+    cityName = $(this).text();
 
   handleSavedCity(cityName, latitude, longitude);
   getCityDetails(latitude, longitude);
-})
-
-$('#btnTwo').on('click', function () {
-  latitude = $(this).attr("latitude");
-  longitude = $(this).attr("longitude");
-  cityName = $('#btnTwo').text();
-
-  // convert lat and lon from string to a number
-  latitude = + (latitude);
-  longitude = + (longitude)
-  console.log(longitude);
-  handleSavedCity(cityName, latitude, longitude);
-  getCityDetails(latitude, longitude);
-})
-
-$('#btnThree').on('click', function () {
-  latitude = $(this).attr("latitude");
-  console.log(latitude);
-  longitude = $(this).attr("longitude");
-  cityName = $('#btnThree').text();
-1
-  // convert lat and lon from string to a number
-  latitude = + (latitude);
-  longitude = + (longitude)
-  console.log(longitude);
-  handleSavedCity(cityName, latitude, longitude);
-  getCityDetails(latitude, longitude);
-})
+    })
+  
 
 // Save searched city to local storage
 function handleSavedCity(cityName, latitude, longitude) {
@@ -248,3 +213,9 @@ function getCityDetails(latitude, longitude) {
 //Trigger button click on 'submit' button
 $("#citySearchForm").on("click", "#cityFormBtn",getCityNames);
  
+// Modal trigger
+const exampleModal = document.getElementById('exampleModal')
+exampleModal.addEventListener('show.bs.modal', event => {
+  // Button that triggered the modal
+  const button = event.relatedTarget
+})

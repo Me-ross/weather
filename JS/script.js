@@ -8,10 +8,15 @@ let dailyConditions;
 let cityName;
 
 init();
-//set city storage to an empty array when page is refreshed
+//check local storage for saved cities and set to empty if none
 function init() {
-  cityList = [];
-  localStorage.setItem("city", JSON.stringify(cityList));
+  if (localStorage.getItem("city")) {
+    cityList = JSON.parse(localStorage.getItem("city"));
+    createCityList(cityList);
+  } else {
+    cityList = [];
+    localStorage.setItem("city", JSON.stringify(cityList));
+  }
 }
 
 // UserInput returns 3 top matches sent to Modal
